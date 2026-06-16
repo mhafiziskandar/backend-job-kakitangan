@@ -222,16 +222,7 @@ def cancel_leave_request(
 
     if was_approved and lr.leave_type != LeaveType.UNPAID:
         year = lr.start_date.year
-        balance = (
-            db.query(LeaveBalance)
-            .filter(
-                LeaveBalance.employee_id == employee_id,
-                LeaveBalance.leave_type == lr.leave_type,
-                LeaveBalance.year == year,
-            )
-            .with_for_update()
-            .first()
-        )
+        balance = _get_balance(db, employee_id, lr.leave_type, year)
         if balance:
             days = _count_working_days(lr.start_date, lr.end_date)
             balance.used_days = max(0.0, balance.used_days - days)
