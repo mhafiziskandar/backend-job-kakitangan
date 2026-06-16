@@ -87,7 +87,7 @@ def create_leave_request(
     - Employee has sufficient leave balance for the requested type
     - end_date - start_date >= 0 (at least 1 day - or handle half-day logic)
     """
-    _get_employee_or_404(db, employee_id)
+    employee = _get_employee_or_404(db, employee_id)  # 404 if employee doesn't exist
 
     today = date.today()
     if start_date < today:
